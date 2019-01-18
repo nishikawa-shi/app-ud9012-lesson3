@@ -16,6 +16,7 @@
 
 package com.example.android.navigation
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
@@ -40,5 +41,31 @@ class GameWonFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater?.inflate(R.menu.winner_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        //TODO: 以下の強制的アンラップをなんとかしたい
+        when (item!!.itemId) {
+            R.id.share -> shareSuccess()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun getShareIntent(): Intent {
+        //TODO: 以下の強制的アンラップをなんとかしたい
+        val additiveType = "text/plain"
+        val args = GameWonFragmentArgs.fromBundle(arguments!!)
+        val additiveValue = getString(R.string.share_success_text,
+                args.numCorrect,
+                args.numQuestions)
+        val shareIntent = Intent(Intent.ACTION_SEND)
+        //TODO: 読みづらい・・・
+        shareIntent.setType(additiveType)
+                .putExtra(Intent.EXTRA_TEXT, additiveValue)
+        return shareIntent
+    }
+
+    private fun shareSuccess() {
+        startActivity(getShareIntent())
     }
 }
