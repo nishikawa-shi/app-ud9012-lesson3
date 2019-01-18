@@ -20,6 +20,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.example.android.navigation.databinding.ActivityMainBinding
@@ -37,6 +39,19 @@ class MainActivity : AppCompatActivity() {
         //TODO: これ何？何で二回設定してんの？
         NavigationUI.setupActionBarWithNavController(this, navController, this.drawerLayout)
         NavigationUI.setupWithNavController(binding.navView, navController)
+
+        navController.addOnDestinationChangedListener { navController: NavController, navDestination: NavDestination, bundle: Bundle? ->
+            //TODO: なんて名前にすれば良いのだろうか
+            val isInStartDestination = (navDestination.id == navController.graph.startDestination)
+            val lockMode = if (isInStartDestination) DrawerLayout.LOCK_MODE_UNLOCKED else DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+            drawerLayout.setDrawerLockMode(lockMode)
+
+//            if (nd.id == nc.graph.startDestination) {
+//                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+//            } else {
+//                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+//            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
