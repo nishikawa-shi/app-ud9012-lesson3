@@ -19,6 +19,7 @@ package com.example.android.navigation
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import androidx.core.app.ShareCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
@@ -57,17 +58,17 @@ class GameWonFragment : Fragment() {
     }
 
     private fun getShareIntent(): Intent {
-        //TODO: 以下の強制的アンラップをなんとかしたい
         val additiveType = "text/plain"
+        //TODO: 以下の強制的アンラップをなんとかしたい
         val args = GameWonFragmentArgs.fromBundle(arguments!!)
         val additiveValue = getString(R.string.share_success_text,
                 args.numCorrect,
                 args.numQuestions)
-        val shareIntent = Intent(Intent.ACTION_SEND)
-        //TODO: 読みづらい・・・
-        shareIntent.setType(additiveType)
-                .putExtra(Intent.EXTRA_TEXT, additiveValue)
-        return shareIntent
+        //TODO: メソッドチェーンが読みづらい・・・
+        return ShareCompat.IntentBuilder.from(activity)
+                .setText(additiveValue)
+                .setType(additiveType)
+                .intent
     }
 
     private fun shareSuccess() {
