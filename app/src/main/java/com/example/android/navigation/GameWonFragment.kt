@@ -41,6 +41,11 @@ class GameWonFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater?.inflate(R.menu.winner_menu, menu)
+        //TODO: 変数の名前。こういう時なんて名前が良い？つかどうしてこれでIntentが成立するかどうかを確かめられるの？
+        val canResolveIntent = getShareIntent().resolveActivity(activity!!.packageManager) == null
+        if (canResolveIntent) {
+            menu?.findItem(R.id.share)?.isVisible = false
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
